@@ -1,0 +1,9 @@
+.hideButton {
+    position: fixed;
+    top: 30px;
+    right: 70px;
+    z-index: 1050;
+    background-color: #fff;
+    color: black;
+    cursor: pointer;
+}

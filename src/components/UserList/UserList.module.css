@@ -1,0 +1,97 @@
+.userListContainer {
+}
+
+.userContainer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.userInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.userName {
+    margin: 0;
+    color: #333;
+}
+
+.userBio {
+    font-size: 8px;
+    color: #666;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.highlighted {
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.userContainer {
+    padding: 1px;
+}
+
+.userContainerAlt {
+    padding: 2px;
+}
+
+.userAvatar {
+    width: 20px;
+    height: 20px;
+}
+
+.userAvatarRound {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+.userName, .userEmail {
+    margin: 0;
+    color: #333;
+    font-size: 14px;
+}
+
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensures it sits on top of other content */
+}
+
+.modal {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 600px; /* Set fixed width */
+    height: 80%; /* Set relative height based on viewport */
+    max-height: 500px; /* Optional: You can set a max height */
+    overflow-y: auto; /* Allows vertical scrolling */
+    overflow-x: hidden; /* Prevents horizontal scrolling */
+    position: relative;
+    z-index: 1001;
+}
+
+.closeButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: none;
+    background: transparent;
+    font-size: 24px;
+    cursor: pointer;
+}
+

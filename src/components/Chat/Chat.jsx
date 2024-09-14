@@ -2,8 +2,13 @@ import Message from './Message';
 import styles from './Chat.module.css';
 
 const Chat = ({ messages, currentUserId }) => {
+    if(!messages){
+        messages = [];
+    }
+
     return (
         <div className={styles.chatContainer}>
+            {currentUserId}
             {messages.map((message) => (
                 <Message
                     key={message.id}

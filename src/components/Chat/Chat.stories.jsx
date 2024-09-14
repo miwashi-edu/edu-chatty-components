@@ -1,5 +1,5 @@
 import Chat from './Chat';
-import chatData from "./chat.json";
+import chatData from "../../testdata/chat.json";
 
 export default {
     title: 'Chatty/Chat',
@@ -11,5 +11,13 @@ export const Default = {
         title: 'Chat',
         currentUserId: 1431,
         messages: chatData,
+    }
+}
+
+
+export const EmptyChat = {
+    args: {
+        title: 'Chat',
+        currentUserId: 1431,
     }
 }
