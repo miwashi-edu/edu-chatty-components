@@ -1,22 +1,22 @@
-import { action } from '@storybook/addon-actions';
-import UserAtom from './UserAtom.jsx';
+import UserAtom from './UserAtom';
+import {action} from "@storybook/addon-actions";
 
 export default {
-    title: 'Chatty/Login/UserAtom',
+    title: 'Login/UserAtom',
     component: UserAtom,
 }
 
 export const Default = {
     args: {
-        onUserChange: action('user-changed'), // Log the 'user-changed' event
+        onUserChange: action('password-changed'),
     },
 };
 
 
 export const WithInitialValue = {
     args: {
-        onUserChange: action('user-changed'),
         initialValue: 'John Doe',
+        onUserChange: action('password-changed'),
     },
 };
 

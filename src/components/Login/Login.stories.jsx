@@ -1,20 +1,26 @@
-import { MockLoginProvider } from './MockLoginProvider.jsx';
-import { LoginProvider } from './LoginProvider.jsx';
-import Login from './Login.jsx';
+import React from 'react';
+import { LoginProvider } from '../Providers/'; // Corrected import
+import Login from './Login';
 
 export default {
-    title: 'Chatty/Login',
+    title: 'Login/Login',
     component: Login,
+    decorators: [(Story) => (
+        <LoginProvider>
+            <Story />
+        </LoginProvider>
+    )]
 };
 
-export const Default = () => (
-    <MockLoginProvider>
-        <Login />
-    </MockLoginProvider>
-);
+export const Default = {
+    args: {
+        defaultUser: 'exampleUser', // If needed to prefill fields or similar
+        defaultPassword: 'examplePassword' // If needed to prefill fields or similar
+    }
+};
 
-export const WithRealProvider = () => (
-    <LoginProvider>
-        <Login />
-    </LoginProvider>
-);
+export const NoOnLoginProvided = {
+    args: {
+        // This scenario might be irrelevant if `onLogin` isn't actually used by the component
+    }
+};

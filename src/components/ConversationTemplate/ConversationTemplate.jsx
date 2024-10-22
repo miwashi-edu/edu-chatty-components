@@ -4,15 +4,8 @@ import styles from './ConversationTemplate.module.css';
 import { UserList, Modal } from "../UserList/";
 import { UserWithName } from "../UserList/User.jsx";
 import { Chat } from "../Chat";
+import ShowUsersButton from "./ShowUsersButton.jsx";
 import HideUsersButtonDecorator from "./HideUsersButtonDecorator.jsx";
-
-const ShowUsersButton = ({ onClick }) => {
-    return (
-        <button onClick={onClick}>
-            Show Users
-        </button>
-    );
-};
 
 export const ConversationTemplate = ({ users }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,7 +17,7 @@ export const ConversationTemplate = ({ users }) => {
         <>
             <ShowUsersButton onClick={toggleModal} />
             {isModalOpen && (
-                <HideUsersButtonDecorator onClose={closeModal} className={styles.hideButton}>
+                <HideUsersButtonDecorator onClose={closeModal} >
                     <Modal isOpen={true}>
                         <UserList users={users}>
                             <UserWithName />

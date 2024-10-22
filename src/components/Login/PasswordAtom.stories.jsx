@@ -1,8 +1,8 @@
-import PasswordAtom from "./PasswordAtom.jsx";
+import PasswordAtom from "./PasswordAtom";
 import {action} from "@storybook/addon-actions";
 
 export default {
-    title:'Chatty/Login/PasswordAtom.',
+    title:'Login/PasswordAtom.',
     component: PasswordAtom,
 }
 

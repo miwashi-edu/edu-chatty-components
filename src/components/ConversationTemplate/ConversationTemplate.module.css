@@ -1,3 +1,16 @@
+.showButton {
+    position: fixed;
+    top: 30px;
+    right: 70px;
+    background-color: #fff;
+    color: black;
+    cursor: pointer;
+    box-shadow: initial;
+    background-color: initial;
+    color: initial;
+    border: initial;
+}
+
 .hideButton {
     position: fixed;
     top: 30px;
@@ -6,4 +19,8 @@
     background-color: #fff;
     color: black;
     cursor: pointer;
+    box-shadow: initial;
+    background-color: initial;
+    color: initial;
+    border: initial;
 }

@@ -1,19 +1,18 @@
-import React from 'react';
-import styles from './UserList.module.css';
-import Avatar from './Avatar';
+const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
 
-const UserWithName = ({ id, username, email, avatar }) => (
-    <div className={styles.userContainer}>
-        <Avatar src={avatar} alt={username} className={styles.userAvatarRound} />
-        <h1 className={styles.userName}>{username}</h1>
-    </div>
+key = crypto.randomBytes(16).toString('base64');
+
+var token = jwt.sign(
+  {},
+  key
 );
 
-const UserWithEmail = ({ id, username, email, avatar }) => (
-    <div className={styles.userContainerAlt}>
-        <Avatar src={avatar} alt={username} className={styles.userAvatar} />
-        <h1 className={styles.userName}>{email?email:'email missing'}</h1>
-    </div>
-);
+console.log(token);
 
-export { UserWithName, UserWithEmail };
+try{
+  const decoded = jwt.verify(token,key);
+  console.log(decoded);
+}catch(err){
+  console.log(err);
+}
