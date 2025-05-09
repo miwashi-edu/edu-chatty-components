@@ -6,12 +6,13 @@ import LoginButton from "./LoginButtonAtom";
 import { useLogin } from '../Providers';
 
 const Login = ({ defaultUser = '', defaultPassword = '' }) => {
-    const { login } = useLogin(); // Get login function, loading state, and error message from LoginProvider
-    const [user, setUser] = useState(defaultUser); // Initialize user state with defaultUser
-    const [password, setPassword] = useState(defaultPassword); // Initialize password state with defaultPassword
+    const { login, isLoading, error } = useLogin();
+    const [user, setUser] = useState(defaultUser);
+    const [password, setPassword] = useState(defaultPassword);
 
     const handleLogin = async () => {
-        await login(user, password); // Call the login function from LoginProvider with user and password
+        console.log(`logging in with ${user} ${password}`)
+        await login(user, password);
     };
 
     return (
@@ -19,12 +20,8 @@ const Login = ({ defaultUser = '', defaultPassword = '' }) => {
             <div className={styles.login}>
                 <UserAtom onUserChange={setUser} defaultValue={defaultUser} />
                 <PasswordAtom onPasswordChange={setPassword} defaultValue={defaultPassword} />
-                <LoginButton onClick={handleLogin} disabled={loading} />
-
-                {/* Display a loading indicator when login is in progress */}
-                {loading && <div className={styles.loading}>Logging in...</div>}
-
-                {/* Display error message if an error occurs during login */}
+                <LoginButton onClick={handleLogin} disabled={isLoading} />
+                {isLoading && <div className={styles.loading}>Logging in...</div>}
                 {error && (
                     <div className={styles.error}>
                         <b>{error}</b>

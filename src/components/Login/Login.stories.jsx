@@ -1,5 +1,5 @@
 import React from 'react';
-import { LoginProvider } from '../Providers/'; // Corrected import
+import { LoginProvider } from '../Providers/';
 import Login from './Login';
 
 export default {

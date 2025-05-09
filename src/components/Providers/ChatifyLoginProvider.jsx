@@ -1,97 +1,50 @@
 import React, { createContext, useContext, useState } from 'react';
+import { login, logout, secureGet, securePost } from './auth';
 
 export const ChatifyLoginContext = createContext({
     isLoggedIn: false,
-    loading: false,
+    isLoading: false,
     error: null,
     login: () => {},
-    logout: () => {}
+    logout: () => {},
+    secureGet: () => {},
+    securePost: () => {}
 });
 
 export const ChatifyLoginProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
     const [bearerToken, setBearerToken] = useState('');
 
-    const getCsrfToken = async () => {
+    const handleLogin = async (username, password) => {
+        console.log(`attempting to login ${username}: ${password}`);
+        setIsLoading(true);
         try {
-            const response = await fetch('https://chatify-api.up.railway.app/csrf', {
-                method: 'PATCH',
-                headers: {
-                    'Accept': 'application/json',
-                }
-            });
-            const data = await response.json();
-            return data.csrfToken;
+            await login(username, password, setIsLoggedIn, setBearerToken);
         } catch (error) {
-            console.error('Failed to fetch CSRF token:', error);
-            return null;
+            setError(error);
+            console.error('Error during login:', error);
         }
+        setIsLoading(false);
     };
 
-    const login = async (username, password) => {
-        const csrfToken = await getCsrfToken();
-        if (!csrfToken) {
-            console.log("CSRF token retrieval failed.");
-            return;
-        }
-        try {
-            const response = await fetch('https://chatify-api.up.railway.app/auth/token', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    username: username,
-                    password: password,
-                    csrfToken: csrfToken
-                })
-            });
-            const data = await response.json();
-            sessionStorage.setItem('csrfToken', csrfToken);
-            sessionStorage.setItem('bearerToken', data.token);
-            setBearerToken(data.bearerToken);
-            setIsLoggedIn(true);
-        } catch (error) {
-            console.error('Login failed:', error);
-        }
+    const handleLogout = () => {
+        logout(setIsLoggedIn);
+        setIsLoading(false);
     };
 
-    const logout = () => {
-        console.log("Logging out.");
-        sessionStorage.removeItem('csrfToken');
-        sessionStorage.removeItem('bearerToken');
-        setIsLoggedIn(false);
-    };
-
-    const secureCall = async (apiUrl, path, options = {}) => {
-        console.log(apiUrl);
-        console.log(path);
-
-        const token = sessionStorage.getItem('bearerToken');
-        console.log(token);
-        const headers = new Headers(options.headers || {});
-        headers.append('Authorization', `Bearer ${token}`);
-
-        try {
-            const response = await fetch(`${apiUrl}${path}`, {
-                ...options,
-                headers: headers
-            });
-            return response.json();
-        } catch (error) {
-            console.error(`Failed to make secure call to ${apiUrl}${path}:`, error);
-            return {error: error.message};
-        }
-    };
+    const handleGet = (apiUrl, path, options) => secureGet(apiUrl, path, options);
+    const handlePost = (apiUrl, path, body, options) => securePost(apiUrl, path, body, options);
 
     const contextValue = {
-        isLoggedIn: isLoggedIn,
-        loading: false,
-        error: null,
-        login: login,
-        logout: logout,
-        secureCall: secureCall
+        isLoggedIn,
+        isLoading,
+        error,
+        login: handleLogin,
+        logout: handleLogout,
+        secureGet: handleGet,
+        securePost: handlePost
     };
 
     return (

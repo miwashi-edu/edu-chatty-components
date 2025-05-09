@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import styles from './ConversationTemplate.module.css';
 import { UserList, Modal } from "../UserList/";
-import { UserWithName } from "../UserList/User.jsx";
+//import { UserWithName } from "../UserList/User.jsx";
 import { Chat } from "../Chat";
 import ShowUsersButton from "./ShowUsersButton.jsx";
 import HideUsersButtonDecorator from "./HideUsersButtonDecorator.jsx";
