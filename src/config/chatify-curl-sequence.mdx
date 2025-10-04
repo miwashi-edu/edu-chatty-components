@@ -1,0 +1,76 @@
+# Chatify Backend – Minimal cURL Sequence (CSRF + JWT)
+
+**Base URL:** `https://chatify-api.up.railway.app`
+
+> Goal: Register → Login (JWT) → Send message → Read messages. Manual, step‑by‑step.
+
+## Prerequisites
+- `curl` installed.
+- A cookie jar file to persist CSRF cookie across requests.
+
+```bash
+# Prepare a cookie jar (for this terminal session)
+COOKIEJAR=cookies.txt
+```
+
+## 1) Get CSRF token
+```bash
+curl -X PATCH https://chatify-api.up.railway.app/csrf -c "$COOKIEJAR"
+```
+- Response JSON includes `"csrfToken"`. **Copy** its value.
+
+## 2) Register (first time only)
+```bash
+curl -X POST https://chatify-api.up.railway.app/auth/register   -b "$COOKIEJAR"   -H "Content-Type: application/json"   -d '{
+    "username":"student1",
+    "password":"s3cr3t!",
+    "email":"student1@example.com",
+    "csrfToken":"<PASTE_CSRF_TOKEN_HERE>"
+  }'
+```
+- If user already exists, you may get `400`. Continue to login.
+
+## 3) Login → get JWT
+```bash
+curl -X POST https://chatify-api.up.railway.app/auth/token   -b "$COOKIEJAR"   -H "Content-Type: application/json"   -d '{
+    "username":"student1",
+    "password":"s3cr3t!",
+    "csrfToken":"<PASTE_SAME_CSRF_TOKEN_HERE>"
+  }'
+```
+- Response JSON includes `"token"`. **Copy** the JWT.
+
+Optional shell helper:
+```bash
+TOKEN="<PASTE_JWT_HERE>"
+AUTH="Authorization: Bearer $TOKEN"
+```
+
+## 4) Auth check (optional)
+```bash
+curl "https://chatify-api.up.railway.app/users?limit=5&offset=0" -H "$AUTH"
+```
+
+## 5) Send a chat message
+Use any valid UUID for `conversationId`.
+```bash
+curl -X POST https://chatify-api.up.railway.app/messages   -H "$AUTH" -H "Content-Type: application/json"   -d '{
+    "text":"Hello from cURL",
+    "conversationId":"550e8400-e29b-41d4-a716-446655440000"
+  }'
+```
+
+## 6) Read messages for that conversation
+```bash
+curl "https://chatify-api.up.railway.app/messages?conversationId=550e8400-e29b-41d4-a716-446655440000"   -H "$AUTH"
+```
+
+### Optional: Invite another user
+```bash
+curl -X POST https://chatify-api.up.railway.app/invite/2   -H "$AUTH" -H "Content-Type: application/json"   -d '{"conversationId":"550e8400-e29b-41d4-a716-446655440000"}'
+```
+
+### Notes
+- Keep `cookies.txt` during the session so CSRF cookies persist.
+- Protected endpoints require `Authorization: Bearer <JWT>`.
+- `conversationId` must be a UUID.

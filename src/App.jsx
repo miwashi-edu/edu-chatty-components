@@ -1,14 +1,10 @@
-import {LoginProvider, LoginPage} from './index.js';
-
 import './App.css'
 
 function App() {
+  const [count, setCount] = useState(0)
+
   return (
-    <>
-        <LoginProvider>
-            <LoginPage/>
-        </LoginProvider>
-    </>
+    <>Chatty Components App</>
   )
 }
 

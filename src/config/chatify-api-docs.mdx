@@ -1,0 +1,111 @@
+# Chatify API (v1.1.3)
+
+**Base URL:** `https://chatify-api.up.railway.app`
+
+## Auth & Security
+- **JWT Bearer**: `Authorization: Bearer <token>`
+- CSRF support:
+  - `PATCH /csrf` → returns `{ csrfToken }`
+  - `DELETE /csrf` → clears CSRF cookie
+  - `csrfToken` appears in bodies for `/auth/register` and `/auth/token`.
+
+## Endpoints
+
+### Misc
+- `GET /env` — environment string. Public.
+
+### Auth
+- `POST /auth/register`
+  - Body: `{ username, password, email, avatar?, csrfToken? }`
+  - 201 on success; 400 with `{ error }` on validation issues.
+- `POST /auth/token`
+  - Body: `{ username, password, csrfToken? }`
+  - 200: `{ token }`; 401 invalid creds.
+
+### Users (JWT)
+- `GET /users`
+  - Query: `username?` (filter, partial), `limit?` (int ≥1), `offset?` (int ≥0)
+  - 200: `[ { userId, username, avatar } ]`
+- `GET /users/count`
+  - 200: `{ total: number }`
+- `GET /users/{userId}`
+  - 200 on found; 404 if not found.
+- `DELETE /users/{userId}`
+  - 200 on delete; 404 if not found.
+- `PUT /user`
+  - Body: `{ userId, updatedData: { ... } }`
+  - 200: `{ message, token }` (returns **new** JWT)
+
+### Invites (JWT)
+- `POST /invite/{userId}`
+  - Body: `{ conversationId: uuid }`
+  - Notes: `conversationId` must be **globally unique** across invites; a user can receive **max 10 invites**.
+  - 200: `{ message }`
+
+### Conversations (JWT)
+- `GET /conversations`
+  - 200: `{ invitesReceived: uuid[], invitesSent: uuid[], participating: uuid[] }`
+
+### Messages (JWT)
+- `GET /messages`
+  - Query: `conversationId?`
+  - 200: `[ { id, text, createdAt, userId, conversationId } ]`
+- `POST /messages`
+  - Body: `{ text, conversationId }` (`conversationId` GUID or null per description)
+  - 201: `{ message, latestMessage: { id, text, conversationId, createdAt, userId } }`
+- `DELETE /messages/{msgID}`
+  - Path: `msgID` (integer)
+  - 200 on delete; 404 if not found.
+
+## Minimal cURL examples
+
+```bash
+# Get CSRF token
+curl -X PATCH https://chatify-api.up.railway.app/csrf
+
+# Register
+curl -X POST https://chatify-api.up.railway.app/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"username":"alice","password":"s3cr3t","email":"a@example.com","csrfToken":"<token>"}'
+
+# Login → JWT
+curl -X POST https://chatify-api.up.railway.app/auth/token \
+  -H "Content-Type: application/json" \
+  -d '{"username":"alice","password":"s3cr3t","csrfToken":"<token>"}'
+
+# List users
+curl "https://chatify-api.up.railway.app/users?limit=20&offset=0" \
+  -H "Authorization: Bearer <JWT>"
+
+# Update current user (returns new JWT)
+curl -X PUT https://chatify-api.up.railway.app/user \
+  -H "Authorization: Bearer <JWT>" -H "Content-Type: application/json" \
+  -d '{"userId":1,"updatedData":{"avatar":"https://.../me.png"}}'
+
+# Send invite
+curl -X POST https://chatify-api.up.railway.app/invite/2 \
+  -H "Authorization: Bearer <JWT>" -H "Content-Type: application/json" \
+  -d '{"conversationId":"550e8400-e29b-41d4-a716-446655440000"}'
+
+# Fetch conversations
+curl https://chatify-api.up.railway.app/conversations \
+  -H "Authorization: Bearer <JWT>"
+
+# Create message
+curl -X POST https://chatify-api.up.railway.app/messages \
+  -H "Authorization: Bearer <JWT>" -H "Content-Type: application/json" \
+  -d '{"text":"Hello","conversationId":"550e8400-e29b-41d4-a716-446655440000"}'
+
+# Get messages for a conversation
+curl "https://chatify-api.up.railway.app/messages?conversationId=550e8400-e29b-41d4-a716-446655440000" \
+  -H "Authorization: Bearer <JWT>"
+
+# Delete message
+curl -X DELETE https://chatify-api.up.railway.app/messages/123 \
+  -H "Authorization: Bearer <JWT>"
+```
+
+## Notes / Constraints
+- Many endpoints require JWT; include the `Authorization` header.
+- Some error cases mention **user/message ID mismatch** with 403.
+- `conversationId` is a UUID; validation errors yield 400.
