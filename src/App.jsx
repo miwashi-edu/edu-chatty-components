@@ -1,10 +1,10 @@
 import './App.css'
-
+import AppProvider from '@/providers';
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>Chatty Components App</>
+    <AppProvider>
+      Chatty Components App
+    </AppProvider>
   )
 }
 

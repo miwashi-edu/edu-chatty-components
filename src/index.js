@@ -1,4 +1,4 @@
 import {LoginProvider} from './components/Providers';
-import {LoginPage} from './components/Pages';
+import {LoginPage} from './Pages';
 
 export {LoginProvider, LoginPage};

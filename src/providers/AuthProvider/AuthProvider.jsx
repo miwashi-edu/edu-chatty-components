@@ -1,64 +1,30 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import AuthContext from './AuthContext.jsx';
-import * as cfg from '@/config/config.js'; // fallback if ConfigProvider not used
-import { useConfig } from '@/providers/ConfigProvider/ConfigContext.jsx';
+import { useConfig } from '@/providers';
+import {joinUrl} from './auth.js';
+import {getCsrf} from './getSrf.js';
 
 const STORAGE_KEY = 'auth.token';
 
-const joinUrl = (base, path) => {
-    if (!path) return base;
-    if (/^https?:\/\//i.test(path)) return path;
-    return `${base.replace(/\/+$/, '')}/${path.replace(/^\/+/, '')}`;
-};
-
-export default function AuthProvider({ children }) {
-    // If ConfigProvider is mounted, prefer it; else fall back to static config
-    let baseUrlFromConfig = cfg.API_BASE_URL;
-    try {
-        const c = useConfig();
-        if (c && c.API_BASE_URL) baseUrlFromConfig = c.API_BASE_URL;
-    } catch (_) {
-        /* not inside ConfigProvider – use cfg fallback */
-    }
-
-    const API_BASE_URL = baseUrlFromConfig;
+const AuthProvider = ({ children }) => {
+    const config = useConfig();
+    const API_BASE_URL = config.API_BASE_URL;
 
     const [token, setToken] = useState(() => localStorage.getItem(STORAGE_KEY) || '');
     const [csrfToken, setCsrfToken] = useState('');
     const fetchingCsrf = useRef(false);
-
     const isAuthenticated = !!token;
 
     const saveToken = useCallback((t) => {
         setToken(t || '');
-        if (t) localStorage.setItem(STORAGE_KEY, t);
-        else localStorage.removeItem(STORAGE_KEY);
+        if (t) {
+            localStorage.setItem(STORAGE_KEY, t);
+        }
+        else {
+            localStorage.removeItem(STORAGE_KEY);
+        }
     }, []);
-
-    const getCsrf = useCallback(async () => {
-        if (csrfToken) return csrfToken;
-        if (fetchingCsrf.current) {
-            // simple wait loop until another call finishes
-            await new Promise(r => setTimeout(r, 150));
-            return csrfToken;
-        }
-        fetchingCsrf.current = true;
-        try {
-            const res = await fetch(joinUrl(API_BASE_URL, '/csrf'), {
-                method: 'PATCH',
-                credentials: 'include',
-            });
-            if (!res.ok) throw new Error(`CSRF failed: ${res.status}`);
-            const data = await res.json().catch(() => ({}));
-            if (data && data.csrfToken) {
-                setCsrfToken(data.csrfToken);
-                return data.csrfToken;
-            }
-            throw new Error('CSRF token missing in response');
-        } finally {
-            fetchingCsrf.current = false;
-        }
-    }, [API_BASE_URL, csrfToken]);
+    const getLocalCsrf = useCallback(() => getCsrf({ apiBaseUrl: API_BASE_URL }), [API_BASE_URL, csrfToken]);
 
     const login = useCallback(async ({ username, password }) => {
         const csrf = await getCsrf();
@@ -143,3 +109,5 @@ export default function AuthProvider({ children }) {
         </AuthContext.Provider>
     );
 }
+
+export default AuthProvider;

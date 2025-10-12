@@ -1,0 +1,20 @@
+.root {
+    display: grid;
+    gap: 16px;
+}
+
+.section {
+    display: block;
+}
+
+.title {
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.pre {
+    padding: 12px;
+    background: #f6f8fa;
+    border-radius: 8px;
+    overflow: auto;
+}

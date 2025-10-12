@@ -1,6 +1,6 @@
 import React from 'react';
 import LoginPage from './LoginPage.jsx';
-import { LoginProvider } from "../Providers";
+import { LoginProvider } from "../components/Providers/index.js";
 
 export default {
     title: 'Pages/LoginPage',
