@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './Login.module.css'; // Import the CSS module
 
-const LoginButtonAtom = ({ onClick }) => {
+const LoginButton = ({ onClick }) => {
     return (
         <button className={styles.submitButton} onClick={onClick}>
             Login
@@ -9,4 +9,4 @@ const LoginButtonAtom = ({ onClick }) => {
     );
 };
 
-export default LoginButtonAtom;
+export default LoginButton;

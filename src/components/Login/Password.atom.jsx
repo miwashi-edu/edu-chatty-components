@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './Login.module.css';
 
-const PasswordAtom = ({ onPasswordChange, defaultValue = '', label = "Password" }) => {
+const Password = ({ onPasswordChange, initialValue = '', label = "Password" }) => {
     // Guard: Ensure onPasswordChange is a function
     if (typeof onPasswordChange !== 'function') {
         console.warn("onPasswordChange should be a function.");
@@ -38,7 +38,7 @@ const PasswordAtom = ({ onPasswordChange, defaultValue = '', label = "Password" 
                 <input
                     type="password"
                     id="passwordInput"
-                    defaultValue={defaultValue} // Set default value
+                    defaultValue={initialValue}
                     onChange={handleChange}
                     placeholder="Enter password"
                     className={styles.passwordInput}
@@ -51,4 +51,4 @@ const PasswordAtom = ({ onPasswordChange, defaultValue = '', label = "Password" 
     );
 };
 
-export default PasswordAtom;
+export default Password;

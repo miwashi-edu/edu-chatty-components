@@ -1,6 +1,6 @@
 import React from 'react';
 import {Footer} from '.';
-import {withConfig, withAuth} from '../../decorators';
+import {withConfig, withAuth} from '@/test-util';
 
 export default {
     title: 'Components/Footer',

@@ -1,9 +1,9 @@
-import UserAtom from './UserAtom';
-import {action} from "@storybook/addon-actions";
+import User from './User.atom';
+import { action } from 'storybook/actions';
 
 export default {
-    title: 'Login/UserAtom',
-    component: UserAtom,
+    title: 'Components/Login/User',
+    component: User,
 }
 
 export const Default = {

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styles from './Login.module.css';
-import UserAtom from "./UserAtom";
-import PasswordAtom from "./PasswordAtom";
-import LoginButton from "./LoginButtonAtom";
+import User from "./User.atom";
+import Password from "./Password.atom";
+import LoginButton from "./LoginButton.atom";
 import { useLogin } from '../Providers';
 
 const Login = ({ defaultUser = '', defaultPassword = '' }) => {
@@ -18,8 +18,8 @@ const Login = ({ defaultUser = '', defaultPassword = '' }) => {
     return (
         <div className={styles.container}>
             <div className={styles.login}>
-                <UserAtom onUserChange={setUser} defaultValue={defaultUser} />
-                <PasswordAtom onPasswordChange={setPassword} defaultValue={defaultPassword} />
+                <User onUserChange={setUser} defaultValue={defaultUser} />
+                <Password onPasswordChange={setPassword} defaultValue={defaultPassword} />
                 <LoginButton onClick={handleLogin} disabled={isLoading} />
                 {isLoading && <div className={styles.loading}>Logging in...</div>}
                 {error && (
