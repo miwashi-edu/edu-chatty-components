@@ -1,0 +1,19 @@
+.nav {
+    width: 200px;
+    padding: 1rem;
+}
+.empty {
+    opacity: 0.5;
+}
+.notice {
+    font-style: italic;
+    margin-bottom: 1rem;
+}
+.link {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+.active {
+    font-weight: bold;
+    color: blue;
+}
