@@ -3,7 +3,7 @@ import {withConfig, withBoundary, ConfigViewer} from '@/test-util';
 
 
 export default {
-    title: 'ConfigProvider',
+    title: 'Providers/ConfigProvider',
     component: ConfigViewer,
 }
 

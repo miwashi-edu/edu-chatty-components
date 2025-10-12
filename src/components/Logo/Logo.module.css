@@ -1,0 +1,7 @@
+.root {
+    display: inline-block;
+    vertical-align: middle;
+    /* crisp scaling without blur on some browsers */
+    /* image-rendering: -webkit-optimize-contrast; */
+    image-rendering: crisp-edges;
+}

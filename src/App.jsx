@@ -1,9 +1,15 @@
 import './App.css'
+import { BrowserRouter } from 'react-router-dom';
+import {PageShell} from '@/templates'
 import AppProvider from '@/providers';
 function App() {
   return (
     <AppProvider>
-      Chatty Components App
+        <BrowserRouter>
+            <PageShell>
+            <h1>Hello World</h1>
+            </PageShell>
+        </BrowserRouter>
     </AppProvider>
   )
 }

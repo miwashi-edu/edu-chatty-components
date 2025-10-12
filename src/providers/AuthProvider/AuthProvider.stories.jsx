@@ -3,7 +3,7 @@ import {withConfig, withAuth, withBoundary, AuthViewer} from '@/test-util';
 
 
 export default {
-    title: 'AuthProvider',
+    title: 'Providers/AuthProvider',
     component: AuthViewer,
     decorators: [withConfig],
 }

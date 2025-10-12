@@ -3,7 +3,7 @@ import { LoginProvider } from '../Providers/';
 import Login from './Login';
 
 export default {
-    title: 'Login/Login',
+    title: 'Components/Login',
     component: Login,
     decorators: [(Story) => (
         <LoginProvider>

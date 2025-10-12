@@ -1,0 +1,18 @@
+.header {
+    padding: 1rem;
+    background: #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    margin: 0;
+}
+
+.header { display:flex; align-items:center; padding:8px 12px; }
+.spacer { flex: 1; }
+.authRow { display:flex; align-items:center; gap:8px; }
+.username { font-weight:600; }
+.btn { border:1px solid #ddd; padding:4px 10px; border-radius:6px; background:#fff; cursor:pointer; text-decoration:none; }
+.btn:hover { background:#f6f6f6; }
