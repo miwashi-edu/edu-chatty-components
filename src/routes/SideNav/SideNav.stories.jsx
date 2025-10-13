@@ -1,4 +1,3 @@
-// SideNav.stories.jsx
 import {SideNav} from ".";
 import { withRouter, withConfig, withAuth  } from "@/test-util";
 

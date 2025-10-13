@@ -1,26 +1,29 @@
 import React from 'react';
-import { LoginProvider } from '../Providers/';
 import Login from './Login';
 
 export default {
     title: 'Components/Login',
     component: Login,
-    decorators: [(Story) => (
-        <LoginProvider>
-            <Story />
-        </LoginProvider>
-    )]
+    decorators: []
 };
 
 export const Default = {
     args: {
-        defaultUser: 'exampleUser', // If needed to prefill fields or similar
-        defaultPassword: 'examplePassword' // If needed to prefill fields or similar
+        defaultUser: 'exampleUser',
+        defaultPassword: 'examplePassword'
     }
 };
 
-export const NoOnLoginProvided = {
+export const NoOnLoginProvided = {args: {}};
+
+export const AsLogin = {
     args: {
-        // This scenario might be irrelevant if `onLogin` isn't actually used by the component
+        isRegister: false
+    }
+};
+
+export const AsRegister = {
+    args: {
+        isRegister: true
     }
 };

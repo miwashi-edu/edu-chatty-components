@@ -68,7 +68,7 @@ curl -X POST https://chatify-api.up.railway.app/auth/register \
   -H "Content-Type: application/json" \
   -d '{"username":"alice","password":"s3cr3t","email":"a@example.com","csrfToken":"<token>"}'
 
-# Login → JWT
+# Register → JWT
 curl -X POST https://chatify-api.up.railway.app/auth/token \
   -H "Content-Type: application/json" \
   -d '{"username":"alice","password":"s3cr3t","csrfToken":"<token>"}'

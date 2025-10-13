@@ -3,16 +3,19 @@ import styles from './Login.module.css';
 import User from "./User.atom";
 import Password from "./Password.atom";
 import LoginButton from "./LoginButton.atom";
-import { useLogin } from '../Providers';
+//import { useLogin } from '../Providers';
 
-const Login = ({ defaultUser = '', defaultPassword = '' }) => {
-    const { login, isLoading, error } = useLogin();
+const Login = ({ defaultUser = '', defaultPassword = '', buttonCaption = '', isRegister = false, onClick}) => {
+    //const { login, isLoading, error } = useLogin();
+    const isLoading = false;
+    const error = [];
+
     const [user, setUser] = useState(defaultUser);
     const [password, setPassword] = useState(defaultPassword);
 
-    const handleLogin = async () => {
+    const handleOnClick = async () => {
         console.log(`logging in with ${user} ${password}`)
-        await login(user, password);
+        await onClick(user, password);
     };
 
     return (
@@ -20,7 +23,7 @@ const Login = ({ defaultUser = '', defaultPassword = '' }) => {
             <div className={styles.login}>
                 <User onUserChange={setUser} defaultValue={defaultUser} />
                 <Password onPasswordChange={setPassword} defaultValue={defaultPassword} />
-                <LoginButton onClick={handleLogin} disabled={isLoading} />
+                <LoginButton onClick={handleOnClick} disabled={isLoading} isRegister={isRegister}/>
                 {isLoading && <div className={styles.loading}>Logging in...</div>}
                 {error && (
                     <div className={styles.error}>

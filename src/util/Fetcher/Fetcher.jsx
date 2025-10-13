@@ -1,5 +1,5 @@
 import React, { useEffect, useState, Children, cloneElement } from 'react';
-import { useLogin } from '../../Providers';
+import { useLogin } from '../../components/Providers/index.js';
 
 const Fetcher = ({ apiUrl, path, children, interval = 0 }) => {
     const { isLoggedIn, secureGet } = useLogin();

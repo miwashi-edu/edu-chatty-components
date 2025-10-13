@@ -1,0 +1,8 @@
+.wrapper {
+    display: flex;
+    height: 100vh;
+}
+.main {
+    flex: 1;
+    padding: 2rem;
+}

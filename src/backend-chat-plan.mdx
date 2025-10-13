@@ -10,13 +10,13 @@ import { Meta, Markdown } from '@storybook/addon-docs/blocks';
 | 2025-10-06 | Mon | ConfigProvider | .env loader; configuration schema; base API URL; feature flags | Config accessible via context; default values + overrides; dev/prod parity | Expose get/set, memoized context |
 | 2025-10-07 | Tue | CookieProvider + CSRF | Cookie abstraction; CSRF fetch via PATCH /csrf; storage & renew; delete via DELETE /csrf | CSRF token retrievable and attached to auth requests; clear works | Graceful fallback if CSRF absent |
 | 2025-10-08 | Wed | ApiProvider | HTTP client wrapper (fetch/axios); base URL; JSON parsing; error normalization; retry on 5xx; Authorization header pluggable | All API calls go through provider; 4xx/5xx surfaced with consistent shape | Add request/response logging toggleable by config |
-| 2025-10-09 | Thu | AuthProvider | Login/Logout; POST /auth/token; token store (cookie/local); attach bearer; guard helpers | Protected call to GET /users succeeds with valid token; logout clears state | Handle 401/403 globally |
-| 2025-10-10 | Fri | Routes | Router with public (Login) and private (Chat, UserLists) routes; redirect rules | Unauth redirects to /login; auth hits /chat | Lazy loading stubs for pages |
+| 2025-10-09 | Thu | AuthProvider | Register/Logout; POST /auth/token; token store (cookie/local); attach bearer; guard helpers | Protected call to GET /users succeeds with valid token; logout clears state | Handle 401/403 globally |
+| 2025-10-10 | Fri | Routes | Router with public (Register) and private (Chat, UserLists) routes; redirect rules | Unauth redirects to /login; auth hits /chat | Lazy loading stubs for pages |
 | 2025-10-11 | Sat | Templates: MainLayout | Header, SideBar, Footer regions; responsive shell; slot for pages | Layout wraps private routes; passes context | Keyboard nav validated |
 | 2025-10-12 | Sun | Atoms | Button, Input, TextArea, Avatar, Spinner, Tag, Timestamp formatter | Story/demo page renders each atom; props documented | No design system conflicts |
 | 2025-10-13 | Mon | Molecules | LoginForm (username/password), MessageBubble (avatar+text+meta), HeaderUserMenu | Submit emits creds; MessageBubble renders sample payload | Validation & disabled states |
 | 2025-10-14 | Tue | Organisms | MessageList (virtualized ok), ConversationList (with counts), SideBarNav | Render with mock data; empty/loading states | ARIA roles set |
-| 2025-10-15 | Wed | Pages: Login | Login page using AuthProvider + LoginForm | Happy-path login works against API | Errors surfaced inline |
+| 2025-10-15 | Wed | Pages: Register | Register page using AuthProvider + LoginForm | Happy-path login works against API | Errors surfaced inline |
 | 2025-10-16 | Thu | Pages: Chat scaffold | Chat page composes Layout + ConversationList + MessageList + composer | Page renders and switches convos (mock) | Composer wired locally |
 | 2025-10-17 | Fri | /conversations integration | GET /conversations; normalize invitesReceived/invitesSent/participating; UI sections | Lists show real data; loading/empty states | Basic caching per session |
 | 2025-10-18 | Sat | /messages (GET) integration | Fetch by conversationId; render MessageList; scroll-to-bottom | Messages appear for selected convo; timestamp formatting | Error toast + retry button |

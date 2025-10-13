@@ -2,7 +2,7 @@
 
 **Base URL:** `https://chatify-api.up.railway.app`
 
-> Goal: Register → Login (JWT) → Send message → Read messages. Manual, step‑by‑step.
+> Goal: Register → Register (JWT) → Send message → Read messages. Manual, step‑by‑step.
 
 ## Prerequisites
 - `curl` installed.
@@ -30,7 +30,7 @@ curl -X POST https://chatify-api.up.railway.app/auth/register   -b "$COOKIEJAR" 
 ```
 - If user already exists, you may get `400`. Continue to login.
 
-## 3) Login → get JWT
+## 3) Register → get JWT
 ```bash
 curl -X POST https://chatify-api.up.railway.app/auth/token   -b "$COOKIEJAR"   -H "Content-Type: application/json"   -d '{
     "username":"student1",

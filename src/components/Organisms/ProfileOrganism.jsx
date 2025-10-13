@@ -1,6 +1,6 @@
 import React from 'react';
-import { Fetcher } from '../util/Fetcher/index.js';
-import { JsonViewer } from '../util/JsonViewer/index.js';
+import { Fetcher } from '../../util/Fetcher/index.js';
+import { JsonViewer } from '../../util/JsonViewer/index.js';
 
 const ProfileOrganism = ({ apiUrl, path }) => {
     return(
