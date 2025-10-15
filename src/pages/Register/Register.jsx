@@ -1,4 +1,5 @@
 import React, {useCallback} from "react";
+import styles from '../pages.module.css';
 import {Login as LoginForm} from "@/components/Login";
 import {ErrorBoundary} from "@/util/index.js";
 import {useAuth} from '@/providers';

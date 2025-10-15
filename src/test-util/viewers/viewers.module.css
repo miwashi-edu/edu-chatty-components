@@ -1,20 +1,57 @@
+/* viewers.module.css */
+
 .root {
     display: grid;
     gap: 16px;
+    padding: 16px;
 }
 
 .section {
-    display: block;
+    border: 1px solid #e5e7eb; /* neutral-200 */
+    border-radius: 8px;
+    padding: 12px;
+    background: #fff;
 }
 
 .title {
     font-weight: 600;
     margin-bottom: 8px;
+    font-size: 14px;
+    color: #111827; /* neutral-900 */
 }
 
 .pre {
-    padding: 12px;
-    background: #f6f8fa;
-    border-radius: 8px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+    font-size: 12px;
+    line-height: 1.5;
+    background: #f9fafb; /* neutral-50 */
+    color: #111827;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 10px;
+    margin: 0;
     overflow: auto;
+    max-height: 420px;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* optional small input/button tweaks for the controls */
+.section input {
+    padding: 8px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+}
+
+.section button {
+    padding: 8px 12px;
+    border: 1px solid #d1d5db; /* neutral-300 */
+    background: #f3f4f6;       /* neutral-100 */
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.section button:hover {
+    background: #e5e7eb;       /* neutral-200 */
 }

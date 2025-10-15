@@ -1,27 +1,21 @@
-import React from 'react';
-import { AuthContext, useAuth } from '@/providers';
+import React, {useMemo, useState} from 'react';
+import {AuthContext, useAuth, useConfig} from '@/providers';
 
-const signIn = () => {
+export const WithAuth = (Story, context) => {
+    const {API_BASE_URL, STORAGE_KEYS, AUTH_ROUTES} = useConfig();
 
-}
+    const signIn = ({ username, password }) => {console.log(AUTH_ROUTES.SIGN_IN, username, password);};
+    const signUp = ({ username, password, email, avatar }) => {console.log(AUTH_ROUTES.SIGN_UP, username, password, email, avatar);};
+    const signOut = () => {console.log(AUTH_ROUTES.SIGN_OUT);};
 
-const signOut = () => {
-
-}
-
-const register = () => {
-
-}
-
-export const withAuth = (Story, context) => {
-    const auth = {
+    const value = useMemo(() => ({
         signIn,
+        signUp,
         signOut,
-        register
-    };
+    }), []);
 
     return (
-        <AuthContext.Provider value={auth}>
+        <AuthContext.Provider value={value}>
             <Story />
         </AuthContext.Provider>
     );

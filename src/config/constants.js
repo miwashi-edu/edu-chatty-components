@@ -1,6 +1,6 @@
 export const AUTH_ROUTES = {
-    SIGN_IN: '/sign-in',
-    REGISTER: '/register',
+    SIGN_IN: '/auth/token',
+    SIGN_UP: '/ auth/register',
     SIGN_OUT: '/sign-out',
 };
 
@@ -28,4 +28,9 @@ export const COOKIE_KEYS = {
     CONSENT: 'cookie-consent',  // whether user accepted cookies
     USER: 'user',                 // stores username + id (JSON/stringified)
     USER_ID: 'id',           // stores user id separately
+};
+
+export const STORAGE_KEYS = {
+     AUTH_TOKEN: 'auth.token',
+     CSRF_TOKEN: 'csrfToken',
 };

@@ -1,1 +1,1 @@
-export const API_BASE_URL = 'http://chatify-api.up.railway.app/';
+export const API_BASE_URL = 'https://chatify-api.up.railway.app/';
