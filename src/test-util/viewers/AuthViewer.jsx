@@ -1,31 +1,23 @@
-// AuthViewer.jsx
 import React, { useEffect, useMemo, useState } from "react";
-import { useAuth } from "@/providers";
+import { useConfig, useAuth } from "@/providers";
 import styles from "./viewers.module.css";
-import { toInspectableJSON } from "./toInspectableJSON.js";
-
-const parseCookies = (cookieStr) =>
-    cookieStr
-        .split(";")
-        .map((c) => c.trim())
-        .filter(Boolean)
-        .map((c) => {
-            const idx = c.indexOf("=");
-            const name = idx >= 0 ? c.slice(0, idx) : c;
-            const value = idx >= 0 ? decodeURIComponent(c.slice(idx + 1)) : "";
-            return { name, value };
-        });
+import { toInspectableJSON, parseCookies } from "./util.js";
+import CookieViewer from "./CookieViewer.jsx";
+import LocalStorageViewer from "./LocalStorageViewer.jsx";
+import SessionStorageViewer from "./SessionStorageViewer.jsx";
 
 export default function AuthViewer() {
-    const { signIn, signOut, signUp, token, ...rest } = useAuth();
+    const { signIn, signOut, signUp, token, status, ...rest } = useAuth();
+    const { STORAGE_KEYS } = useConfig();
 
     // auth controls state
-    const [loginU, setLoginU] = useState("");
-    const [loginP, setLoginP] = useState("");
+    const [user, setUser] = useState("");
+    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("");
+    const [avatar, setAvatar] = useState("");
     const [reg, setReg] = useState({ username: "", password: "", email: "", avatar: "" });
     const [msg, setMsg] = useState("");
 
-    // cookie viewer state
     const [rawCookies, setRawCookies] = useState(typeof document !== "undefined" ? document.cookie : "");
     const cookies = useMemo(() => parseCookies(rawCookies), [rawCookies]);
 
@@ -36,8 +28,7 @@ export default function AuthViewer() {
 
     const doLogin = async () => {
         try {
-            console.log("login");
-            await signIn({ username: loginU, password: loginP });
+            await signIn({ username: user, password });
             setMsg("login ok");
             refreshCookies();
         } catch (e) {
@@ -47,11 +38,21 @@ export default function AuthViewer() {
 
     const doRegister = async () => {
         try {
-            await signUp(reg);
+            await signUp({ username: user, password, email, avatar });
             setMsg("register ok (or exists)");
             refreshCookies();
         } catch (e) {
             setMsg(`register: ${e.message}`);
+        }
+    };
+
+    const doGetCsrf = async () => {
+        try {
+            // add method later
+            setMsg("csrf ok");
+            refreshCookies();
+        } catch (e) {
+            setMsg(`get csrf token: ${e.message}`);
         }
     };
 
@@ -92,79 +93,44 @@ export default function AuthViewer() {
 
     return (
         <div className={styles.root}>
+
+
             <div className={styles.section}>
                 <div className={styles.title}>Auth controls</div>
 
-                <div style={{ display: "grid", gap: 12 }}>
-                    <div style={{ display: "grid", gap: 6 }}>
-                        <strong>Login</strong>
-                        <input placeholder="username" value={loginU} onChange={(e) => setLoginU(e.target.value)} />
-                        <input placeholder="password" type="password" value={loginP} onChange={(e) => setLoginP(e.target.value)} />
-                        <button onClick={doLogin}>Login</button>
-                    </div>
+                <div className={styles.controls}>
+                    <strong>Login</strong>
+                    <input placeholder="username" value={user} onChange={(e) => setUser(e.target.value)} />
+                    <input placeholder="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                    <input placeholder="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                    <input placeholder="avatar" value={avatar} onChange={(e) => setAvatar(e.target.value)} />
 
-                    <div style={{ display: "grid", gap: 6 }}>
-                        <strong>Register</strong>
-                        <input
-                            placeholder="username"
-                            value={reg.username}
-                            onChange={(e) => setReg((s) => ({ ...s, username: e.target.value }))}
-                        />
-                        <input
-                            placeholder="password"
-                            type="password"
-                            value={reg.password}
-                            onChange={(e) => setReg((s) => ({ ...s, password: e.target.value }))}
-                        />
-                        <input
-                            placeholder="email"
-                            type="email"
-                            value={reg.email}
-                            onChange={(e) => setReg((s) => ({ ...s, email: e.target.value }))}
-                        />
-                        <input
-                            placeholder="avatar"
-                            value={reg.avatar}
-                            onChange={(e) => setReg((s) => ({ ...s, avatar: e.target.value }))}
-                        />
-                        <button onClick={doRegister}>Register</button>
-                    </div>
-
-                    <div style={{ display: "grid", gap: 6 }}>
-                        <strong>Logout</strong>
-                        <button onClick={doLogout}>Logout</button>
+                    <div className={styles.actions}>
+                        <button type="button" onClick={doLogin}>Login</button>
+                        <button type="button" onClick={doRegister}>Register</button>
+                        <button type="button" onClick={doLogout}>Logout</button>
+                        <button type="button" onClick={doGetCsrf}>Get csrf token</button>
                     </div>
 
                     <pre className={styles.pre}>
-            token: {token ? "[set]" : "[none]"}
-                        {msg && `\n${msg}`}
-          </pre>
+token: {token ? "[set]" : "[none]"}{msg && `\n${msg}`}
+                    </pre>
+                    <pre className={styles.pre}>
+status: {status}
+                    </pre>
                 </div>
             </div>
 
             <div className={styles.section}>
-                <div className={styles.title}>Cookies (client-visible)</div>
-                <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
-                    <button onClick={refreshCookies}>Refresh</button>
-                    <button onClick={copyCookies}>Copy</button>
-                </div>
+                <CookieViewer />
+            </div>
 
-                {cookies.length === 0 ? (
-                    <div>No cookies visible to JavaScript (HttpOnly cookies won’t show).</div>
-                ) : (
-                    <ul style={{ margin: 0, paddingLeft: 16 }}>
-                        {cookies.map(({ name, value }) => (
-                            <li key={name} style={{ wordBreak: "break-all" }}>
-                                <strong>{name}</strong>: {value || "(empty)"}
-                            </li>
-                        ))}
-                    </ul>
-                )}
+            <div className={styles.section}>
+                <LocalStorageViewer  include={[STORAGE_KEYS.AUTH_TOKEN, STORAGE_KEYS.CSRF_TOKEN]}/>
+            </div>
 
-                <div style={{ marginTop: 8 }}>
-                    <div style={{ fontSize: 12, opacity: 0.75, marginBottom: 4 }}>Raw document.cookie</div>
-                    <pre className={styles.pre}>{rawCookies || "(empty)"}</pre>
-                </div>
+            <div className={styles.section}>
+                <SessionStorageViewer  include={[STORAGE_KEYS.AUTH_TOKEN, STORAGE_KEYS.CSRF_TOKEN]}/>
             </div>
 
             <div className={styles.section}>

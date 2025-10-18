@@ -26,3 +26,15 @@ export const toInspectableJSON = (obj) => {
         return json;
     }
 };
+
+export const parseCookies = (cookieStr) =>
+    cookieStr
+        .split(";")
+        .map((c) => c.trim())
+        .filter(Boolean)
+        .map((c) => {
+            const idx = c.indexOf("=");
+            const name = idx >= 0 ? c.slice(0, idx) : c;
+            const value = idx >= 0 ? decodeURIComponent(c.slice(idx + 1)) : "";
+            return { name, value };
+        });

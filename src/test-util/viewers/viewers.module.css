@@ -42,6 +42,7 @@
     padding: 8px;
     border: 1px solid #e5e7eb;
     border-radius: 6px;
+    width: 100%;
 }
 
 .section button {
@@ -54,4 +55,65 @@
 
 .section button:hover {
     background: #e5e7eb;       /* neutral-200 */
+}
+
+/* NEW: layout helpers */
+.controls {
+    display: grid;
+    gap: 6px;
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.actions button {
+    white-space: nowrap;
+}
+
+.btn { white-space: nowrap; }
+
+.btnDanger {
+    border-color: #fca5a5;       /* red-300 */
+    background: #fee2e2;         /* red-100 */
+}
+.btnDanger:hover { background: #fecaca; } /* red-200 */
+
+.muted { color: #6b7280; } /* neutral-500 */
+
+.kvList {
+    margin: 0;
+    padding-left: 16px;
+    display: grid;
+    gap: 8px;
+}
+
+.kvItem { list-style: disc; }
+
+.kvRow { display: grid; gap: 6px; }
+
+.kvLine { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 4px; }
+
+.kvKey { font-weight: 600; }
+
+.kvSep { opacity: 0.6; }
+
+.kvValue { word-break: break-all; }
+
+.metaTag {
+    margin-left: 8px;
+    font-size: 12px;
+    opacity: 0.75;
+    font-style: italic;
+}
+
+.inlineInput {
+    padding: 6px 8px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    background: #fff;
+    min-width: 160px;
 }

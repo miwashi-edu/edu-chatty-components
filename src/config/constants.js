@@ -2,6 +2,7 @@ export const AUTH_ROUTES = {
     SIGN_IN: '/auth/token',
     SIGN_UP: '/ auth/register',
     SIGN_OUT: '/sign-out',
+    CSRF_TOKEN: '/csrf',
 };
 
 export const AUTH_STATUS = {
@@ -32,5 +33,5 @@ export const COOKIE_KEYS = {
 
 export const STORAGE_KEYS = {
      AUTH_TOKEN: 'auth.token',
-     CSRF_TOKEN: 'csrfToken',
+     CSRF_TOKEN: 'csrf.token',
 };
