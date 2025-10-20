@@ -1,20 +1,16 @@
 // src/test-util/ApiViewer.jsx
 import React, { useCallback, useMemo, useState } from 'react';
 import styles from './viewers.module.css';
-import { useApi } from '@/providers'; // assumes you export a useApi() hook
+import { useApi } from '@/providers';
 
 const json = (v) => JSON.stringify(v, null, 2);
 
-const ApiViewer = () => {
+export default function ApiViewer() {
     const {
         getEnv,
-        // users
         getUsers, getUsersCount, getUserById, deleteUserById, updateUser,
-        // invites
         inviteUser,
-        // conversations
         getConversations,
-        // messages
         getMessages, postMessage, deleteMessage,
     } = useApi();
 
@@ -66,20 +62,21 @@ const ApiViewer = () => {
 
                 <div className={styles.controls}>
                     <strong>Users</strong>
-                    <div className={styles.row}>
-                        <input placeholder="username filter" value={username} onChange={(e)=>setUsername(e.target.value)} />
-                        <input placeholder="limit" type="number" value={limit} onChange={(e)=>setLimit(Number(e.target.value||0))} />
-                        <input placeholder="offset" type="number" value={offset} onChange={(e)=>setOffset(Number(e.target.value||0))} />
-                        <button type="button" disabled={!available.getUsers} onClick={() => call(() => getUsers({ username, limit, offset }))}>get users</button>
-                        <button type="button" disabled={!available.getUsersCount} onClick={() => call(() => getUsersCount())}>count</button>
+                    <div className={styles.actions}>
+                        <input className={styles.inlineInput} placeholder="username filter" value={username} onChange={(e)=>setUsername(e.target.value)} />
+                        <input className={styles.inlineInput} placeholder="limit" type="number" value={limit} onChange={(e)=>setLimit(Number(e.target.value||0))} />
+                        <input className={styles.inlineInput} placeholder="offset" type="number" value={offset} onChange={(e)=>setOffset(Number(e.target.value||0))} />
+                        <button type="button" className={styles.btn} disabled={!available.getUsers} onClick={() => call(() => getUsers({ username, limit, offset }))}>get users</button>
+                        <button type="button" className={styles.btn} disabled={!available.getUsersCount} onClick={() => call(() => getUsersCount())}>count</button>
                     </div>
 
-                    <div className={styles.row}>
-                        <input placeholder="userId" value={userId} onChange={(e)=>setUserId(e.target.value)} />
-                        <button type="button" disabled={!available.getUserById || !userId} onClick={() => call(() => getUserById(userId))}>get by id</button>
-                        <button type="button" disabled={!available.deleteUserById || !userId} onClick={() => call(() => deleteUserById(userId))}>delete by id</button>
+                    <div className={styles.actions}>
+                        <input className={styles.inlineInput} placeholder="userId" value={userId} onChange={(e)=>setUserId(e.target.value)} />
+                        <button type="button" className={styles.btn} disabled={!available.getUserById || !userId} onClick={() => call(() => getUserById(userId))}>get by id</button>
+                        <button type="button" className={`${styles.btn} ${styles.btnDanger}`} disabled={!available.deleteUserById || !userId} onClick={() => call(() => deleteUserById(userId))}>delete by id</button>
                         <button
                             type="button"
+                            className={styles.btn}
                             disabled={!available.updateUser || !userId}
                             onClick={() => call(() => updateUser(userId, { avatar: 'https://example.com/a.png' }))}>
                             update (avatar demo)
@@ -87,42 +84,40 @@ const ApiViewer = () => {
                     </div>
 
                     <strong>Invites</strong>
-                    <div className={styles.row}>
-                        <input placeholder="userId (target)" value={userId} onChange={(e)=>setUserId(e.target.value)} />
-                        <input placeholder="conversationId (uuid)" value={convId} onChange={(e)=>setConvId(e.target.value)} />
-                        <button type="button" disabled={!available.inviteUser || !userId || !convId} onClick={() => call(() => inviteUser(userId, convId))}>invite</button>
+                    <div className={styles.actions}>
+                        <input className={styles.inlineInput} placeholder="userId (target)" value={userId} onChange={(e)=>setUserId(e.target.value)} />
+                        <input className={styles.inlineInput} placeholder="conversationId (uuid)" value={convId} onChange={(e)=>setConvId(e.target.value)} />
+                        <button type="button" className={styles.btn} disabled={!available.inviteUser || !userId || !convId} onClick={() => call(() => inviteUser(userId, convId))}>invite</button>
                     </div>
 
                     <strong>Conversations</strong>
-                    <div className={styles.row}>
-                        <button type="button" disabled={!available.getConversations} onClick={() => call(() => getConversations())}>get conversations</button>
+                    <div className={styles.actions}>
+                        <button type="button" className={styles.btn} disabled={!available.getConversations} onClick={() => call(() => getConversations())}>get conversations</button>
                     </div>
 
                     <strong>Messages</strong>
-                    <div className={styles.row}>
-                        <input placeholder="conversationId (optional)" value={convId} onChange={(e)=>setConvId(e.target.value)} />
-                        <button type="button" disabled={!available.getMessages} onClick={() => call(() => getMessages(convId || undefined))}>get messages</button>
+                    <div className={styles.actions}>
+                        <input className={styles.inlineInput} placeholder="conversationId (optional)" value={convId} onChange={(e)=>setConvId(e.target.value)} />
+                        <button type="button" className={styles.btn} disabled={!available.getMessages} onClick={() => call(() => getMessages(convId || undefined))}>get messages</button>
                     </div>
 
-                    <div className={styles.row}>
-                        <input placeholder="text" value={text} onChange={(e)=>setText(e.target.value)} />
-                        <input placeholder="conversationId" value={convId} onChange={(e)=>setConvId(e.target.value)} />
-                        <button type="button" disabled={!available.postMessage || !text} onClick={() => call(() => postMessage(text, convId || null))}>post message</button>
+                    <div className={styles.actions}>
+                        <input className={styles.inlineInput} placeholder="text" value={text} onChange={(e)=>setText(e.target.value)} />
+                        <input className={styles.inlineInput} placeholder="conversationId" value={convId} onChange={(e)=>setConvId(e.target.value)} />
+                        <button type="button" className={styles.btn} disabled={!available.postMessage || !text} onClick={() => call(() => postMessage(text, convId || null))}>post message</button>
                     </div>
 
-                    <div className={styles.row}>
-                        <input placeholder="message id" value={msgId} onChange={(e)=>setMsgId(e.target.value)} />
-                        <button type="button" disabled={!available.deleteMessage || !msgId} onClick={() => call(() => deleteMessage(msgId))}>delete message</button>
+                    <div className={styles.actions}>
+                        <input className={styles.inlineInput} placeholder="message id" value={msgId} onChange={(e)=>setMsgId(e.target.value)} />
+                        <button type="button" className={`${styles.btn} ${styles.btnDanger}`} disabled={!available.deleteMessage || !msgId} onClick={() => call(() => deleteMessage(msgId))}>delete message</button>
                     </div>
 
                     <strong>Misc</strong>
-                    <div className={styles.row}>
-                        <button type="button" disabled={!available.getEnv} onClick={() => call(() => getEnv())}>get /env</button>
+                    <div className={styles.actions}>
+                        <button type="button" className={styles.btn} disabled={!available.getEnv} onClick={() => call(() => getEnv())}>get /env</button>
                     </div>
 
-                    <pre className={styles.pre}>
-status: {msg || '[idle]'}
-          </pre>
+                    <pre className={styles.pre}>status: {msg || '[idle]'}</pre>
                 </div>
             </div>
 
@@ -138,5 +133,3 @@ status: {msg || '[idle]'}
         </div>
     );
 }
-
-export default ApiViewer;

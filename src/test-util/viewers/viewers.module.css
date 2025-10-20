@@ -1,5 +1,6 @@
 /* viewers.module.css */
 
+/* Layout */
 .root {
     display: grid;
     gap: 16px;
@@ -20,6 +21,7 @@
     color: #111827; /* neutral-900 */
 }
 
+/* Preformatted output */
 .pre {
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
     "Courier New", monospace;
@@ -37,30 +39,10 @@
     word-break: break-word;
 }
 
-/* optional small input/button tweaks for the controls */
-.section input {
-    padding: 8px;
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
-    width: 100%;
-}
-
-.section button {
-    padding: 8px 12px;
-    border: 1px solid #d1d5db; /* neutral-300 */
-    background: #f3f4f6;       /* neutral-100 */
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-.section button:hover {
-    background: #e5e7eb;       /* neutral-200 */
-}
-
-/* NEW: layout helpers */
+/* Controls & actions */
 .controls {
     display: grid;
-    gap: 6px;
+    gap: 8px;
 }
 
 .actions {
@@ -70,8 +52,61 @@
     align-items: center;
 }
 
-.actions button {
-    white-space: nowrap;
+/* Inputs (section-wide defaults) */
+.section input {
+    padding: 8px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    width: 100%;
+    background: #fff;
+    color: #111827;
+    outline: none;
+    transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.section input:focus {
+    border-color: #93c5fd;          /* blue-300 */
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); /* blue focus ring */
+}
+
+/* Inline inputs used inside .actions rows */
+.inlineInput {
+    padding: 6px 8px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    background: #fff;
+    min-width: 160px;
+}
+
+.section .inlineInput {
+    width: auto; /* override section default width */
+}
+
+/* Buttons */
+.section button {
+    padding: 8px 12px;
+    border: 1px solid #d1d5db; /* neutral-300 */
+    background: #f3f4f6;       /* neutral-100 */
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    line-height: 1.2;
+    transition: background-color 120ms ease, border-color 120ms ease, box-shadow 120ms ease, opacity 120ms ease;
+}
+
+.section button:hover {
+    background: #e5e7eb;       /* neutral-200 */
+}
+
+.section button:focus-visible {
+    outline: none;
+    border-color: #93c5fd; /* blue-300 */
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+}
+
+.section button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 .btn { white-space: nowrap; }
@@ -80,10 +115,13 @@
     border-color: #fca5a5;       /* red-300 */
     background: #fee2e2;         /* red-100 */
 }
+
 .btnDanger:hover { background: #fecaca; } /* red-200 */
 
+/* Text utilities */
 .muted { color: #6b7280; } /* neutral-500 */
 
+/* Key/Value lists */
 .kvList {
     margin: 0;
     padding-left: 16px;
@@ -110,10 +148,10 @@
     font-style: italic;
 }
 
-.inlineInput {
-    padding: 6px 8px;
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
-    background: #fff;
-    min-width: 160px;
+/* Small-screen tweaks */
+@media (max-width: 640px) {
+    .root { padding: 12px; gap: 12px; }
+    .section { padding: 10px; }
+    .inlineInput { min-width: 140px; }
+    .pre { max-height: 300px; }
 }

@@ -1,9 +1,8 @@
-import { useConfig } from '@/providers/index.js';
+import { useConfig } from '@/providers';
 import styles from './viewers.module.css';
 
-const ConfigViewer = () => {
+export default function ConfigViewer() {
     const config = useConfig();
-
     return (
         <div className={styles.root}>
             <div className={styles.section}>
@@ -12,6 +11,4 @@ const ConfigViewer = () => {
             </div>
         </div>
     );
-};
-
-export default ConfigViewer;
+}

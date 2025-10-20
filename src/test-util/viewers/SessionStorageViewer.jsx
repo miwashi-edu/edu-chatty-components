@@ -1,3 +1,4 @@
+// src/test-util/SessionStorageViewer.jsx
 import React, { useEffect, useMemo, useState } from "react";
 import styles from "./viewers.module.css";
 
@@ -12,7 +13,6 @@ function readAll() {
     }
     return out.sort((a, b) => (a.key || "").localeCompare(b.key || ""));
 }
-
 function normalizeList(x) {
     if (!x) return null;
     if (Array.isArray(x)) return x.map(String);
@@ -20,24 +20,14 @@ function normalizeList(x) {
     return null;
 }
 
-/**
- * Props:
- *  - include?: string[] | string (comma-separated)
- *  - omit?: string[] | string (comma-separated)
- * Behavior:
- *  - If include is provided, show only those keys (plus empty rows for any missing keys).
- *  - omit always hides matching keys (overrides include).
- */
-export default function sessionStorageViewer({ include, omit }) {
+export default function SessionStorageViewer({ include, omit }) {
     const [rows, setRows] = useState(readAll());
     const [msg, setMsg] = useState("");
-
     const [newKey, setNewKey] = useState("");
     const [newVal, setNewVal] = useState("");
-
-    const [editing, setEditing] = useState(null); // key being edited
+    const [editing, setEditing] = useState(null);
     const [editVal, setEditVal] = useState("");
-    const [renaming, setRenaming] = useState(null); // key being renamed
+    const [renaming, setRenaming] = useState(null);
     const [newName, setNewName] = useState("");
 
     const refresh = () => setRows(readAll());
@@ -47,97 +37,40 @@ export default function sessionStorageViewer({ include, omit }) {
     const omitList = useMemo(() => normalizeList(omit), [omit]);
 
     const filteredRows = useMemo(() => {
-        // start from actual rows
         let map = new Map(rows.map(r => [r.key, { key: r.key, value: r.value }]));
-
-        // if include specified: restrict to include set, and add empty placeholders for missing
         if (includeList && includeList.length) {
-            const incSet = new Set(includeList);
             const subset = new Map();
-            includeList.forEach(k => {
-                if (map.has(k)) subset.set(k, map.get(k));
-                else subset.set(k, { key: k, value: "" , _virtual: true }); // empty row for missing key
-            });
+            includeList.forEach(k => subset.set(k, map.get(k) ?? { key: k, value: "", _virtual: true }));
             map = subset;
         }
-
-        // apply omit last (wins)
-        if (omitList && omitList.length) {
-            const omitSet = new Set(omitList);
-            omitSet.forEach(k => map.delete(k));
-        }
-
-        // return sorted by key for stable display
+        if (omitList && omitList.length) omitList.forEach(k => map.delete(k));
         return [...map.values()].sort((a, b) => a.key.localeCompare(b.key));
     }, [rows, includeList, omitList]);
 
-    const onAdd = () => {
-        if (!hasWin) return;
-        if (!newKey) return setMsg("key required");
+    const onAdd = () => { if (!hasWin) return; if (!newKey) return setMsg("key required");
         window.sessionStorage.setItem(newKey, newVal);
-        setNewKey(""); setNewVal("");
-        refresh();
-        setMsg("item set");
+        setNewKey(""); setNewVal(""); refresh(); setMsg("item set");
     };
-
-    const onEdit = (k, v) => {
-        setEditing(k);
-        setEditVal(v ?? "");
-    };
-
-    const onSave = (k) => {
-        if (!hasWin) return;
-        window.sessionStorage.setItem(k, editVal);
-        setEditing(null);
-        refresh();
-        setMsg("item updated");
-    };
-
-    const onDelete = (k) => {
-        if (!hasWin) return;
-        window.sessionStorage.removeItem(k);
-        if (editing === k) setEditing(null);
-        refresh();
-        setMsg("item deleted");
-    };
-
-    const onClearAll = () => {
-        if (!hasWin) return;
-        window.sessionStorage.clear();
-        refresh();
-        setMsg("all items cleared");
-    };
-
-    const onRename = (oldKey) => {
-        setRenaming(oldKey);
-        setNewName(oldKey);
-    };
-
+    const onEdit = (k, v) => { setEditing(k); setEditVal(v ?? ""); };
+    const onSave = (k) => { if (!hasWin) return; window.sessionStorage.setItem(k, editVal); setEditing(null); refresh(); setMsg("item updated"); };
+    const onDelete = (k) => { if (!hasWin) return; window.sessionStorage.removeItem(k); if (editing === k) setEditing(null); refresh(); setMsg("item deleted"); };
+    const onClearAll = () => { if (!hasWin) return; window.sessionStorage.clear(); refresh(); setMsg("all items cleared"); };
+    const onRename = (oldKey) => { setRenaming(oldKey); setNewName(oldKey); };
     const onApplyRename = (oldKey) => {
         if (!hasWin) return;
         const val = window.sessionStorage.getItem(oldKey);
-        // If oldKey didn't exist (virtual), treat as create under new name
         if (newName && newName !== oldKey) {
-            if (val !== null) {
-                window.sessionStorage.setItem(newName, val);
-                window.sessionStorage.removeItem(oldKey);
-            } else {
-                window.sessionStorage.setItem(newName, "");
-            }
+            if (val !== null) { window.sessionStorage.setItem(newName, val); window.sessionStorage.removeItem(oldKey); }
+            else { window.sessionStorage.setItem(newName, ""); }
         }
-        setRenaming(null);
-        refresh();
-        setMsg("item renamed");
+        setRenaming(null); refresh(); setMsg("item renamed");
     };
-
     const copyJSON = async () => {
         try {
-            const obj = filteredRows.reduce((acc, { key, value }) => { acc[key] = value; return acc; }, {});
+            const obj = filteredRows.reduce((acc, { key, value }) => (acc[key] = value, acc), {});
             await navigator.clipboard.writeText(JSON.stringify(obj, null, 2));
             setMsg("sessionStorage copied");
-        } catch {
-            setMsg("copy failed");
-        }
+        } catch { setMsg("copy failed"); }
     };
 
     const sizeInfo = useMemo(() => {
@@ -147,12 +80,13 @@ export default function sessionStorageViewer({ include, omit }) {
 
     return (
         <div className={styles.section}>
-            <div className={styles.title}>sessionStorage ({sizeInfo})</div>
+            <div className={styles.title}>SessionStorage ({sizeInfo})</div>
 
-            <div className={styles.controls} style={{ marginBottom: 8 }}>
+            <div className={styles.controls}>
                 <div className={styles.actions}>
                     <button type="button" className={styles.btn} onClick={refresh}>Refresh</button>
                     <button type="button" className={styles.btn} onClick={copyJSON}>Copy JSON</button>
+                    <button type="button" className={`${styles.btn} ${styles.btnDanger}`} onClick={onClearAll}>Clear all</button>
                 </div>
                 {msg && <pre className={styles.pre}>{msg}</pre>}
             </div>
@@ -167,22 +101,12 @@ export default function sessionStorageViewer({ include, omit }) {
                                 <div className={styles.kvLine}>
                                     <strong className={styles.kvKey}>
                                         {renaming === key ? (
-                                            <input
-                                                className={styles.inlineInput}
-                                                value={newName}
-                                                onChange={(e) => setNewName(e.target.value)}
-                                            />
-                                        ) : (
-                                            key
-                                        )}
+                                            <input className={styles.inlineInput} value={newName} onChange={(e) => setNewName(e.target.value)} />
+                                        ) : key}
                                     </strong>
                                     <span className={styles.kvSep}>: </span>
                                     {editing === key ? (
-                                        <input
-                                            className={styles.inlineInput}
-                                            value={editVal}
-                                            onChange={(e) => setEditVal(e.target.value)}
-                                        />
+                                        <input className={styles.inlineInput} value={editVal} onChange={(e) => setEditVal(e.target.value)} />
                                     ) : (
                                         <span className={styles.kvValue}>{value || "(empty)"}</span>
                                     )}
