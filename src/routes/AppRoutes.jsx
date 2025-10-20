@@ -6,6 +6,7 @@ import {
     HomePage,
     ConfigPage,
     AuthPage,
+    ApiPage,
     LoginPage,
     RegisterPage,
 } from "@/pages";
@@ -19,6 +20,7 @@ export const AppRoutes = () => {
             <Route path="/sign-in" element={<LoginPage />} />
             <Route path="/config" element={<ConfigPage />} />
             <Route path="/auth" element={<AuthPage />} />
+            <Route path="/api" element={<ApiPage />} />
         </Routes>
     )
 }

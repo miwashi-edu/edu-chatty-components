@@ -2,7 +2,7 @@
 
 **Base URL:** `https://chatify-api.up.railway.app`
 
-## Auth & Security
+## Api & Security
 - **JWT Bearer**: `Authorization: Bearer <token>`
 - CSRF support:
   - `PATCH /csrf` → returns `{ csrfToken }`
@@ -14,7 +14,7 @@
 ### Misc
 - `GET /env` — environment string. Public.
 
-### Auth
+### Api
 - `POST /auth/register`
   - Body: `{ username, password, email, avatar?, csrfToken? }`
   - 201 on success; 400 with `{ error }` on validation issues.

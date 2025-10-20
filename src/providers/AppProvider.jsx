@@ -1,10 +1,10 @@
-import {ConfigProvider, AuthProvider} from '.';
+import {ConfigProvider, AuthProvider, ApiProvider} from '.';
 
 const AppProvider = ({children}) => {
     return (
         <ConfigProvider>
             <AuthProvider>
-                {children}
+                <ApiProvider>{children}</ApiProvider>
             </AuthProvider>
         </ConfigProvider>
     )

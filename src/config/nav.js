@@ -4,6 +4,7 @@ export const PAGE_LINKS = [
     { to: '/', label: 'Home', end: true },
     { to: '/config', label: 'Config' },
     { to: '/auth', label: 'Auth'  },
+    { to: '/api', label: 'Api'  },
     { to: '/example2', label: 'Example 2', minStatus: AUTH_STATUS.AUTHORISED },
     { to: '/register', label: 'Register'  },
     { to: '/cvs', label: 'List CV', minStatus: AUTH_STATUS.ADMIN  },
