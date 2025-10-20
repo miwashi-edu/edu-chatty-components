@@ -78,9 +78,17 @@ const AuthProvider = ({ children }) => {
         console.log(AUTH_ROUTES.SIGN_OUT);
     }, [AUTH_ROUTES.SIGN_OUT, AUTH_TOKEN_KEY]);
 
+    const secureFetch = (method, headers = {}, body, url) => {
+        const m = String(method || '').toUpperCase();
+        if (!['GET','POST','PUT','PATCH','DELETE','HEAD','OPTIONS'].includes(m)) {
+            throw new Error(`Unsupported method: ${m}`);
+        }
+
+    }
+
     const value = useMemo(
         () => ({ signIn, signUp, signOut, status, authToken, csrfToken }),
-        [signIn, signUp, signOut, status, authToken, csrfToken]
+        [signIn, signUp, signOut, status, authToken, csrfToken, secureFetch]
     );
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
